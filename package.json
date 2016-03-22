@@ -1,0 +1,30 @@
+{
+  "name": "web-starter",
+  "description": "Starter kit for simple web sites",
+  "version": "0.0.1",
+  "homepage": "http://itsluk.as",
+  "repository": "lukasjuhas/web-starter",
+  "author": "Lukas Juhas <hello@lukasjuhas.com> (http://itsluk.as/)",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-preset-airbnb": "^1.1.1",
+    "browser-sync": "^2.11.1",
+    "fs": "0.0.2",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-bump": "^1.0.0",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-if": "^2.0.0",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-sass": "^2.2.0",
+    "gulp-streamify": "^1.0.2",
+    "gulp-uglify": "^1.5.3",
+    "gulp-watch": "^4.3.5",
+    "run-sequence": "^1.1.5",
+    "yargs": "^4.3.2"
+  },
+  "license": "MIT"
+}
