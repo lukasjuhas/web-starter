@@ -1,8 +1,5 @@
 node_modules/
 .sass-cache/
-bower_components/
 npm-debug.log
 .DS_Store
-tests
-build
-dist
+.tmp
