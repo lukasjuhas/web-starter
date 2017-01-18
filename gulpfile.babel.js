@@ -7,13 +7,17 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
 import vue from 'rollup-plugin-vue';
+import multiEntry from 'rollup-plugin-multi-entry';
+import uglify from 'rollup-plugin-uglify';
+import { minify } from 'uglify-js';
 
 import clean from 'gulp-clean';
 import sass from 'gulp-sass';
+import autoprefixer from 'gulp-autoprefixer';
 import imagemin from 'gulp-imagemin';
 import rename from 'gulp-rename';
 import gulpif from 'gulp-if';
-import uglify from 'gulp-uglify';
+import greplace from 'gulp-replace';
 import sourcemaps from 'gulp-sourcemaps';
 import browserSync from 'browser-sync';
 import fs from 'fs';
@@ -23,36 +27,47 @@ import { argv } from 'yargs';
 
 const reload = browserSync.reload;
 const config = {
+  srcBase: './src',
   src: './src/assets',
   public: './public',
 };
 
-const tasks = ['images', 'styles', 'scripts'];
+const tasks = ['images', 'styles', 'scripts', 'html', 'move'];
 
 gulp.task('scripts', ['clean-scripts'], () => {
   rollup({
-    // BUG: https://github.com/rollup/rollup-plugin-node-resolve/issues/43
-    entry: 'src/assets/scripts/app.js',
+    entry: `${config.src}/scripts/app.js`,
     plugins: [
-      vue(),
+      multiEntry(),
       nodeResolve({
+        browser: true,
+        main: true,
         jsnext: true,
       }),
-      commonjs(),
-      babel({
-        babelrc: false, // rollup needs it's own preset.
-        presets: ['es2015-rollup'],
-        exclude: 'node_modules/**',
+      commonjs({
+        include: [
+          'node_modules/**',
+          `${config.src}/**`,
+        ],
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development'),
         'process.env.VUE_ENV': JSON.stringify('browser'),
       }),
+      vue(),
+      babel({
+        runtimeHelpers: true,
+        babelrc: false, // rollup needs it's own preset.
+        presets: ['es2015-rollup', 'stage-2'],
+        // exclude: 'node_modules/**',
+      }),
+      production ? uglify({}, minify) : '',
     ],
   }).then(bundle => {
     bundle.write({
       format: 'iife',
-      sourceMap: gulpif(!production, true, false),
+      moduleName: 'WebStarterBundle',
+      sourceMap: !production,
       dest: `${config.public}/scripts/scripts.min.js`,
     });
   }).catch(err => console.log(err.stack));
@@ -68,12 +83,20 @@ gulp.task('clean-scripts', () => (
   .pipe(clean())
 ));
 
+gulp.task('clean-html', () => (
+  gulp.src(`${config.public}/*.html`, { read: false })
+  .pipe(clean())
+));
+
 gulp.task('browser-sync', () => {
   browserSync.init(null, {
-    proxy: 'http://pilgrimist.dev',
+    server: {
+      baseDir: config.public,
+    },
+    // proxy: 'http://webstarter.dev',
     files: [`${config.public}/**/*.*`],
     browser: 'google chrome',
-    port: 7000,
+    port: 2525,
   });
 });
 
@@ -87,8 +110,11 @@ gulp.task('styles', () => (
   gulp.src(`${config.src}/styles/*.scss`)
     .pipe(gulpif(!production, sourcemaps.init()))
     .pipe(sass({
-      outputStyle: 'compressed',
+      outputStyle: production ? 'compressed' : 'nested',
     }).on('error', sass.logError))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+    }))
     .pipe(rename({
       suffix: '.min',
     }))
@@ -103,6 +129,20 @@ gulp.task('images', () => {
     svgoPlugins: [{ removeViewBox: false }],
   }))
   .pipe(gulp.dest(`${config.public}/images`));
+});
+
+gulp.task('html', ['styles'], () => {
+  gulp.src(`${config.srcBase}/*.html`)
+  .pipe(greplace(/<link href="styles\/core.min.css"[^>]*>/, () => {
+    const style = fs.readFileSync(`${config.public}/styles/core.min.css`, 'utf8');
+    return `<style>\n${style}\n</style>`;
+  }))
+  .pipe(gulp.dest(config.public));
+});
+
+gulp.task('move', ['clean-html'], () => {
+  gulp.src([`${config.src}/*.html`])
+  .pipe(gulp.dest(config.public));
 });
 
 gulp.task('getversion', () => {
