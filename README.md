@@ -1,5 +1,5 @@
 # Web Starter
-Starter kit for simple web sites
+Starter kit for web sites and web apps
 
 ## Tasks
 #### Default / Development
