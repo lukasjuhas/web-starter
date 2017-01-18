@@ -1,5 +1,5 @@
 # Web Starter
-Starter kit for web sites and web apps
+Starter kit for web sites and web apps using. (gulp-rollup-vuejs)
 
 ## Tasks
 #### Default / Development

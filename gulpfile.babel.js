@@ -2,7 +2,7 @@ let production = false;
 
 import gulp from 'gulp';
 import { rollup } from 'rollup';
-import babel from 'rollup-plugin-babel';
+import buble from 'rollup-plugin-buble';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
@@ -10,7 +10,7 @@ import vue from 'rollup-plugin-vue';
 import multiEntry from 'rollup-plugin-multi-entry';
 import uglify from 'rollup-plugin-uglify';
 import { minify } from 'uglify-js';
-
+import path from 'path';
 import clean from 'gulp-clean';
 import sass from 'gulp-sass';
 import autoprefixer from 'gulp-autoprefixer';
@@ -24,21 +24,32 @@ import fs from 'fs';
 import bump from 'gulp-bump';
 import runSequence from 'run-sequence';
 import { argv } from 'yargs';
+import changeCase from 'change-case';
 
 const reload = browserSync.reload;
 const config = {
   srcBase: './src',
   src: './src/assets',
+  tmp: './.tmp',
   public: './public',
 };
 
-const tasks = ['images', 'styles', 'scripts', 'html', 'move'];
+const tasks = ['images','scripts', 'styles', 'html', 'move'];
 
 gulp.task('scripts', ['clean-scripts'], () => {
   rollup({
     entry: `${config.src}/scripts/app.js`,
     plugins: [
       multiEntry(),
+      vue({
+        css(content, styles) {
+          styles.forEach(({ id }) => {
+            const filename = path.basename(id).replace(/\.vue$/, '.scss');
+            fs.writeFileSync(`${config.tmp}/${changeCase.lower(filename)}`, content);
+          });
+        },
+      }),
+      buble(),
       nodeResolve({
         browser: true,
         main: true,
@@ -54,13 +65,6 @@ gulp.task('scripts', ['clean-scripts'], () => {
         'process.env.NODE_ENV': JSON.stringify('development'),
         'process.env.VUE_ENV': JSON.stringify('browser'),
       }),
-      vue(),
-      babel({
-        runtimeHelpers: true,
-        babelrc: false, // rollup needs it's own preset.
-        presets: ['es2015-rollup', 'stage-2'],
-        // exclude: 'node_modules/**',
-      }),
       production ? uglify({}, minify) : '',
     ],
   }).then(bundle => {
@@ -68,7 +72,7 @@ gulp.task('scripts', ['clean-scripts'], () => {
       format: 'iife',
       moduleName: 'WebStarterBundle',
       sourceMap: !production,
-      dest: `${config.public}/scripts/scripts.min.js`,
+      dest: `${config.public}/scripts/app.min.js`,
     });
   }).catch(err => console.log(err.stack));
 });
@@ -100,14 +104,14 @@ gulp.task('browser-sync', () => {
   });
 });
 
-gulp.task('watch', () => {
+gulp.task('watch', ['styles', 'scripts', 'images'], () => {
   gulp.watch(`${config.src}/styles/**/*.scss`, ['styles', reload]);
   gulp.watch(`${config.src}/scripts/**/*.js`, ['scripts', reload]);
   gulp.watch(`${config.src}/images/**/*.*`, ['images', reload]);
 });
 
-gulp.task('styles', () => (
-  gulp.src(`${config.src}/styles/*.scss`)
+gulp.task('styles', ['scripts'], () => (
+  gulp.src([`${config.src}/styles/*.scss`, `${config.tmp}/*.scss`])
     .pipe(gulpif(!production, sourcemaps.init()))
     .pipe(sass({
       outputStyle: production ? 'compressed' : 'nested',
