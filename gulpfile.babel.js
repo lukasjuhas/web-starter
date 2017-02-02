@@ -43,9 +43,9 @@ gulp.task('scripts', ['clean-scripts'], () => {
       multiEntry(),
       vue({
         css(content, styles) {
-          styles.forEach(({ id }) => {
+          styles.forEach(({ id, code }) => {
             const filename = path.basename(id).replace(/\.vue$/, '.scss');
-            fs.writeFileSync(`${config.tmp}/${changeCase.lower(filename)}`, content);
+            fs.writeFileSync(`${config.tmp}/${changeCase.lower(filename)}`, code);
           });
         },
       }),
