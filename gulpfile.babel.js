@@ -106,7 +106,7 @@ gulp.task('browser-sync', () => {
 
 gulp.task('watch', ['styles', 'scripts', 'images'], () => {
   gulp.watch(`${config.src}/styles/**/*.scss`, ['styles', reload]);
-  gulp.watch(`${config.src}/scripts/**/*.js`, ['scripts', reload]);
+  gulp.watch(`${config.src}/scripts/**/*.{js,vue}`, ['scripts', reload]);
   gulp.watch(`${config.src}/images/**/*.*`, ['images', reload]);
 });
 
