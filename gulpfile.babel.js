@@ -108,12 +108,12 @@ gulp.task('browser-sync', () => {
 });
 
 gulp.task('watch', tasks, () => {
-  gulp.watch(`${config.src}/styles/**/*.scss`, ['styles', reload]);
+  gulp.watch([`${config.src}/styles/**/*.scss`, `${config.tmp}/*.scss`], ['styles', reload]);
   gulp.watch(`${config.src}/scripts/**/*.{js,vue}`, ['scripts', reload]);
   gulp.watch(`${config.src}/images/**/*.*`, ['images', reload]);
 });
 
-gulp.task('styles', ['scripts'], () => (
+gulp.task('styles', () => (
   gulp.src([`${config.src}/styles/*.scss`, `${config.tmp}/*.scss`])
     .pipe(gulpif(!production, sourcemaps.init()))
     .pipe(sass({
