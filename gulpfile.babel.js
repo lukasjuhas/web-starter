@@ -5,6 +5,7 @@ import { rollup } from 'rollup';
 import buble from 'rollup-plugin-buble';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import json from 'rollup-plugin-json';
 import replace from 'rollup-plugin-replace';
 import vue from 'rollup-plugin-vue';
 import multiEntry from 'rollup-plugin-multi-entry';
@@ -64,6 +65,7 @@ gulp.task('scripts', ['clean-scripts'], () => {
           `${config.src}/**`,
         ],
       }),
+      json(),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development'),
         'process.env.VUE_ENV': JSON.stringify('browser'),
