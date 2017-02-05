@@ -1,4 +1,6 @@
 # Web Starter
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/lukasjuhas/web-starter.svg)](https://greenkeeper.io/)
 Starter kit for web sites and web apps. (gulp-rollup-vuejs)
 
 ## Tasks
