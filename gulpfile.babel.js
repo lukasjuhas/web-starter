@@ -1,5 +1,3 @@
-let production = false;
-
 import gulp from 'gulp';
 import { rollup } from 'rollup';
 import buble from 'rollup-plugin-buble';
@@ -27,6 +25,8 @@ import runSequence from 'run-sequence';
 import { argv } from 'yargs';
 import changeCase from 'change-case';
 
+let production = false;
+
 const reload = browserSync.reload;
 const config = {
   srcBase: './src',
@@ -38,13 +38,18 @@ const config = {
 const tasks = ['images', 'scripts', 'styles', 'html', 'move'];
 
 gulp.task('scripts', ['clean-scripts'], () => {
+  let env = 'development';
+  if (production) {
+    env = 'production';
+  }
+
   rollup({
     entry: `${config.src}/scripts/app.js`,
     plugins: [
       multiEntry(),
       vue({
         css(content, styles) {
-          if (!fs.existsSync(config.tmp)){
+          if (!fs.existsSync(config.tmp)) {
             fs.mkdirSync(config.tmp);
           }
           styles.forEach(({ id, code }) => {
@@ -67,12 +72,12 @@ gulp.task('scripts', ['clean-scripts'], () => {
       }),
       json(),
       replace({
-        'process.env.NODE_ENV': JSON.stringify('development'),
+        'process.env.NODE_ENV': JSON.stringify(env),
         'process.env.VUE_ENV': JSON.stringify('browser'),
       }),
       production ? uglify({}, minify) : '',
     ],
-  }).then(bundle => {
+  }).then((bundle) => {
     bundle.write({
       format: 'iife',
       moduleName: 'WebStarterBundle',
@@ -83,17 +88,23 @@ gulp.task('scripts', ['clean-scripts'], () => {
 });
 
 gulp.task('clean-styles', () => (
-  gulp.src(`${config.public}/styles`, { read: false })
+  gulp.src(`${config.public}/styles`, {
+    read: false,
+  })
   .pipe(clean())
 ));
 
 gulp.task('clean-scripts', () => (
-  gulp.src(`${config.public}/scripts`, { read: false })
+  gulp.src(`${config.public}/scripts`, {
+    read: false,
+  })
   .pipe(clean())
 ));
 
 gulp.task('clean-html', () => (
-  gulp.src(`${config.public}/*.html`, { read: false })
+  gulp.src(`${config.public}/*.html`, {
+    read: false,
+  })
   .pipe(clean())
 ));
 
@@ -117,41 +128,43 @@ gulp.task('watch', tasks, () => {
 
 gulp.task('styles', () => (
   gulp.src([`${config.src}/styles/*.scss`, `${config.tmp}/*.scss`])
-    .pipe(gulpif(!production, sourcemaps.init()))
-    .pipe(sass({
-      outputStyle: production ? 'compressed' : 'nested',
-    }).on('error', sass.logError))
-    .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
-    }))
-    .pipe(rename({
-      suffix: '.min',
-    }))
-    .pipe(gulpif(!production, sourcemaps.write('.')))
-    .pipe(gulp.dest(`${config.public}/styles`))
+  .pipe(gulpif(!production, sourcemaps.init()))
+  .pipe(sass({
+    outputStyle: production ? 'compressed' : 'nested',
+  }).on('error', sass.logError))
+  .pipe(autoprefixer({
+    browsers: ['last 2 versions'],
+  }))
+  .pipe(rename({
+    suffix: '.min',
+  }))
+  .pipe(gulpif(!production, sourcemaps.write('.')))
+  .pipe(gulp.dest(`${config.public}/styles`))
 ));
 
 gulp.task('images', () => {
   gulp.src(`${config.src}/images/**/*.*`)
-  .pipe(imagemin({
-    progressive: true,
-    svgoPlugins: [{ removeViewBox: false }],
-  }))
-  .pipe(gulp.dest(`${config.public}/images`));
+    .pipe(imagemin({
+      progressive: true,
+      svgoPlugins: [{
+        removeViewBox: false,
+      }],
+    }))
+    .pipe(gulp.dest(`${config.public}/images`));
 });
 
 gulp.task('html', ['styles'], () => {
   gulp.src(`${config.srcBase}/*.html`)
-  .pipe(greplace(/<link href="styles\/core.min.css"[^>]*>/, () => {
-    const style = fs.readFileSync(`${config.public}/styles/core.min.css`, 'utf8');
-    return `<style>\n${style}\n</style>`;
-  }))
-  .pipe(gulp.dest(config.public));
+    .pipe(greplace(/<link href="styles\/core.min.css"[^>]*>/, () => {
+      const style = fs.readFileSync(`${config.public}/styles/core.min.css`, 'utf8');
+      return `<style>\n${style}\n</style>`;
+    }))
+    .pipe(gulp.dest(config.public));
 });
 
 gulp.task('move', ['clean-html'], () => {
   gulp.src([`${config.src}/*.html`])
-  .pipe(gulp.dest(config.public));
+    .pipe(gulp.dest(config.public));
 });
 
 gulp.task('getversion', () => {

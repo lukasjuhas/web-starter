@@ -51,10 +51,9 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-uglify": "^1.0.1",
-    "rollup-plugin-vue": "^2.2.16",
+    "rollup-plugin-vue": "^2.2.20",
     "run-sequence": "^1.2.2",
     "uglify-js": "^2.7.5",
-    "vue-template-compiler": "^2.1.10",
     "yargs": "^6.6.0"
   },
   "license": "MIT"
