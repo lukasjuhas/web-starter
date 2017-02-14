@@ -3,7 +3,13 @@
   "description": "Starter kit for simple web sites",
   "version": "0.0.0",
   "homepage": "http://itsluk.as",
-  "repository": "lukasjuhas/web-starter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukasjuhas/web-starter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lukasjuhas/web-starter/issues"
+  },
   "author": "Lukas Juhas <lukas@itsluk.as>",
   "private": true,
   "dependencies": {
