@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="286.3px" height="286.3px" viewBox="0 0 286.3 286.3" enable-background="new 0 0 286.3 286.3" xml:space="preserve"><style>.style0{stroke:	#000000;stroke-miterlimit:	10;fill:	none;}.style1{stroke:	#000000;stroke-miterlimit:	10;}</style><g><g><g><g><path d="M264.33 143c0-66.98-54.3-121.29-121.29-121.29C76.06 21.7 21.8 76 21.8 143c0 67 54.3 121.3 121.3 121.3 C210.03 264.3 264.3 210 264.3 143z M143.04 0.31c78.81 0 142.7 63.9 142.7 142.69c0 78.81-63.881 142.7-142.69 142.7 C64.23 285.7 0.3 221.8 0.3 143C0.35 64.2 64.2 0.3 143 0.31z"/></g><g><path d="M285.73 143c0 78.81-63.881 142.7-142.69 142.7 C64.23 285.7 0.3 221.8 0.3 143C0.35 64.2 64.2 0.3 143 0.31C221.85 0.3 285.7 64.2 285.7 143z" class="style0"/><path d="M264.33 143c0 66.99-54.3 121.29-121.29 121.3 c-66.98 0-121.29-54.3-121.29-121.29c0-66.98 54.31-121.29 121.29-121.29C210.03 21.7 264.3 76 264.3 143z" class="style0"/></g></g></g><rect x="114.5" y="43.1" width="21.4" height="171.2" class="style1"/><rect x="150.2" y="78.8" width="21.4" height="164.1" class="style1"/><circle cx="160.9" cy="53.8" r="10.7" class="style1"/></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 287 287" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-miterlimit:10;">
+    <g>
+        <g>
+            <path d="M264.33,143C264.33,76.02 210.03,21.71 143.04,21.71C76.06,21.7 21.8,76 21.8,143C21.8,210 76.1,264.3 143.1,264.3C210.03,264.3 264.3,210 264.3,143L264.33,143ZM143.04,0.31C221.85,0.31 285.74,64.21 285.74,143C285.74,221.81 221.859,285.7 143.05,285.7C64.23,285.7 0.3,221.8 0.3,143C0.35,64.2 64.2,0.3 143,0.31L143.04,0.31Z" style="fill-rule:nonzero;"/>
+            <g>
+                <path d="M285.73,143C285.73,221.81 221.849,285.7 143.04,285.7C64.23,285.7 0.3,221.8 0.3,143C0.35,64.2 64.2,0.3 143,0.31C221.85,0.3 285.7,64.2 285.7,143L285.73,143Z" style="fill:none;stroke:black;stroke-width:1px;"/>
+                <path d="M264.33,143C264.33,209.99 210.03,264.29 143.04,264.3C76.06,264.3 21.75,210 21.75,143.01C21.75,76.03 76.06,21.72 143.04,21.72C210.03,21.7 264.3,76 264.3,143L264.33,143Z" style="fill:none;stroke:black;stroke-width:1px;"/>
+            </g>
+        </g>
+    </g>
+</svg>
