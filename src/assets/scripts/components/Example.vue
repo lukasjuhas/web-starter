@@ -18,6 +18,6 @@
 
 <style lang="scss">
   .example {
-    background-color: red;
+    font-style: italic;
   }
 </style>

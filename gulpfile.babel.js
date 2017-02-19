@@ -12,6 +12,7 @@ import { minify } from 'uglify-js';
 import path from 'path';
 import clean from 'gulp-clean';
 import sass from 'gulp-sass';
+import inject from 'gulp-inject';
 import autoprefixer from 'gulp-autoprefixer';
 import imagemin from 'gulp-imagemin';
 import rename from 'gulp-rename';
@@ -35,7 +36,7 @@ const config = {
   public: './public',
 };
 
-const tasks = ['images', 'scripts', 'styles', 'html', 'move'];
+const tasks = ['images', 'scripts', 'core-styles', 'styles', 'html', 'move'];
 
 gulp.task('scripts', ['clean-scripts'], () => {
   let env = 'development';
@@ -54,7 +55,7 @@ gulp.task('scripts', ['clean-scripts'], () => {
           }
           styles.forEach(({ id, code }) => {
             const filename = path.basename(id).replace(/\.vue$/, '.scss');
-            fs.writeFileSync(`${config.tmp}/${changeCase.lower(filename)}`, code);
+            fs.writeFileSync(`${config.tmp}/_${changeCase.lower(filename)}`, code);
           });
         },
       }),
@@ -121,14 +122,39 @@ gulp.task('browser-sync', () => {
 });
 
 gulp.task('watch', tasks, () => {
-  gulp.watch([`${config.src}/styles/**/*.scss`, `${config.tmp}/*.scss`], ['styles', reload]);
-  gulp.watch(`${config.src}/scripts/**/*.{js,vue}`, ['scripts', reload]);
+  gulp.watch([`${config.src}/styles/core.scss`], ['core-styles', 'html', reload]);
+  gulp.watch([`${config.src}/styles/**/*.scss`, `${config.tmp}/*.scss`, `!${config.src}/styles/core.scss`], ['styles', reload]);
+  gulp.watch(`${config.src}/scripts/**/*.vue`, ['styles', 'core-styles', 'html', 'scripts', reload]);
+  gulp.watch(`${config.src}/scripts/**/*.js`, ['scripts', reload]);
   gulp.watch(`${config.src}/images/**/*.*`, ['images', reload]);
 });
 
+gulp.task('core-styles', () => (
+  gulp.src([`${config.src}/styles/core.scss`])
+    .pipe(gulpif(!production, sourcemaps.init()))
+    .pipe(sass({
+      outputStyle: production ? 'compressed' : 'nested',
+    }).on('error', sass.logError))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+    }))
+    .pipe(rename({
+      suffix: '.min',
+    }))
+    .pipe(gulpif(!production, sourcemaps.write('.')))
+    .pipe(gulp.dest(`${config.public}/styles`))
+));
+
 gulp.task('styles', () => (
-  gulp.src([`${config.src}/styles/*.scss`, `${config.tmp}/*.scss`])
+  gulp.src([`${config.src}/styles/app.scss`, `${config.tmp}/*.scss`])
   .pipe(gulpif(!production, sourcemaps.init()))
+  .pipe(inject(gulp.src([`${config.tmp}/*.scss`], {read: false}), {
+    starttag: '/* inject:imports */',
+    endtag: '/* endinject */',
+    transform: function (filepath) {
+      return '@import "../../../' + filepath + '";';
+    }
+  }))
   .pipe(sass({
     outputStyle: production ? 'compressed' : 'nested',
   }).on('error', sass.logError))

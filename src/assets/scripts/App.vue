@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <img src="./images/logo.svg">
+        <svg class="logo"><use xlink:href="#logo"></use></svg>
         <example></example>
     </div>
 </template>
@@ -16,3 +16,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  .logo {
+    width: 50px;
+    height: 50px;
+  }
+</style>
