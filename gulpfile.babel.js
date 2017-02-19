@@ -14,6 +14,7 @@ import clean from 'gulp-clean';
 import sass from 'gulp-sass';
 import inject from 'gulp-inject';
 import autoprefixer from 'gulp-autoprefixer';
+import svgSprite from 'gulp-svg-sprite';
 import imagemin from 'gulp-imagemin';
 import rename from 'gulp-rename';
 import gulpif from 'gulp-if';
@@ -131,18 +132,18 @@ gulp.task('watch', tasks, () => {
 
 gulp.task('core-styles', () => (
   gulp.src([`${config.src}/styles/core.scss`])
-    .pipe(gulpif(!production, sourcemaps.init()))
-    .pipe(sass({
-      outputStyle: production ? 'compressed' : 'nested',
-    }).on('error', sass.logError))
-    .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
-    }))
-    .pipe(rename({
-      suffix: '.min',
-    }))
-    .pipe(gulpif(!production, sourcemaps.write('.')))
-    .pipe(gulp.dest(`${config.public}/styles`))
+  .pipe(gulpif(!production, sourcemaps.init()))
+  .pipe(sass({
+    outputStyle: production ? 'compressed' : 'nested',
+  }).on('error', sass.logError))
+  .pipe(autoprefixer({
+    browsers: ['last 2 versions'],
+  }))
+  .pipe(rename({
+    suffix: '.min',
+  }))
+  .pipe(gulpif(!production, sourcemaps.write('.')))
+  .pipe(gulp.dest(`${config.public}/styles`))
 ));
 
 gulp.task('styles', () => (
@@ -169,12 +170,37 @@ gulp.task('styles', () => (
 ));
 
 gulp.task('images', () => {
-  gulp.src(`${config.src}/images/**/*.*`)
+  // hadle all images that are not svg
+  gulp.src([`${config.src}/images/**/*.*`, `!${config.src}/images/**/*.svg`])
+    .pipe(imagemin({
+      progressive: true,
+    }))
+    .pipe(gulp.dest(`${config.public}/images`));
+
+  // handle svg
+  gulp.src(`${config.src}/images/**/*.svg`)
     .pipe(imagemin({
       progressive: true,
       svgoPlugins: [{
         removeViewBox: false,
       }],
+    }))
+    .pipe(gulp.dest(`${config.tmp}/svgs`));
+
+  // create a sprite
+  gulp.src(`${config.src}/images/*.svg`)
+    .pipe(svgSprite({
+      svg: {
+        xmlDeclaration: false,
+        doctypeDeclaration: false
+      },
+      mode: {
+        inline: true,
+        symbol: {
+          dest: '.',
+          sprite: 'sprite.svg'
+        }
+      }
     }))
     .pipe(gulp.dest(`${config.public}/images`));
 });
@@ -184,6 +210,10 @@ gulp.task('html', ['styles'], () => {
     .pipe(greplace(/<link href="styles\/core.min.css"[^>]*>/, () => {
       const style = fs.readFileSync(`${config.public}/styles/core.min.css`, 'utf8');
       return `<style>\n${style}\n</style>`;
+    }))
+    .pipe(greplace(/<!-- svg-sprite -->/, () => {
+      const style = fs.readFileSync(`${config.public}/images/sprite.svg`, 'utf8');
+      return `<div style="display:none;">\n${style}\n</div>`;
     }))
     .pipe(gulp.dest(config.public));
 });
