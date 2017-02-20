@@ -122,7 +122,7 @@ gulp.task('browser-sync', () => {
   });
 });
 
-gulp.task('watch', tasks, () => {
+gulp.task('watch-files', tasks, () => {
   gulp.watch([`${config.src}/styles/core.scss`], ['core-styles', 'html', reload]);
   gulp.watch([`${config.src}/styles/**/*.scss`, `${config.tmp}/*.scss`, `!${config.src}/styles/core.scss`], ['styles', reload]);
   gulp.watch(`${config.src}/scripts/**/*.vue`, ['styles', 'core-styles', 'html', 'scripts', reload]);
@@ -238,8 +238,8 @@ gulp.task('bump', () => {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('dev', () => (
-  runSequence('clean-styles', 'clean-scripts', tasks, 'browser-sync', 'watch')
+gulp.task('watch', () => (
+  runSequence('clean-styles', 'clean-scripts', tasks, 'browser-sync', 'watch-files')
 ));
 
 gulp.task('build', () => {
