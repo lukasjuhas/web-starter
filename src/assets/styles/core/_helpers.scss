@@ -33,7 +33,7 @@
 }
 
 .clearfix {
-  @extend clearfix;
+  @include clearfix;
 }
 
 /**
@@ -48,7 +48,7 @@
 }
 
 .align-text-center {
-  text-align: right;
+  text-align: center;
 }
 
 /**
