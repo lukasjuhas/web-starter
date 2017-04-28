@@ -26,6 +26,8 @@ import bump from 'gulp-bump';
 import runSequence from 'run-sequence';
 import { argv } from 'yargs';
 import changeCase from 'change-case';
+import { join } from 'path';
+import swPrecache from 'sw-precache';
 
 let production = false;
 
@@ -37,7 +39,11 @@ const config = {
   public: './public',
 };
 
-const tasks = ['images', 'scripts', 'core-styles', 'styles', 'html', 'move'];
+const tasks = ['images', 'scripts', 'core-styles', 'styles', 'html', 'move', 'generate-service-worker'];
+
+const getPackageJson = () => {
+  return JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+}
 
 gulp.task('scripts', ['clean-scripts'], () => {
   let env = 'development';
@@ -103,12 +109,17 @@ gulp.task('clean-scripts', () => (
   .pipe(clean())
 ));
 
-gulp.task('clean-html', () => (
-  gulp.src(`${config.public}/*.html`, {
+gulp.task('clean-static', () => {
+  const staticFiles = [
+    `${config.public}/*.html`,
+    `${config.public}/manifest.json`,
+  ];
+
+  return gulp.src(staticFiles, {
     read: false,
   })
-  .pipe(clean())
-));
+  .pipe(clean());
+});
 
 gulp.task('browser-sync', () => {
   browserSync.init(null, {
@@ -171,7 +182,7 @@ gulp.task('styles', () => (
 
 gulp.task('images', () => {
   // hadle all images that are not svg
-  gulp.src([`${config.src}/images/**/*.*`, `!${config.src}/images/**/*.svg`])
+  gulp.src([`${config.src}/images/**/*.*`, `!${config.src}/images/sprite/*.svg`])
     .pipe(imagemin({
       progressive: true,
     }))
@@ -188,7 +199,7 @@ gulp.task('images', () => {
     .pipe(gulp.dest(`${config.tmp}/svgs`));
 
   // create a sprite
-  gulp.src(`${config.src}/images/*.svg`)
+  gulp.src(`${config.src}/images/sprite/*.svg`)
     .pipe(svgSprite({
       svg: {
         xmlDeclaration: false,
@@ -215,11 +226,20 @@ gulp.task('html', ['styles'], () => {
       const style = fs.readFileSync(`${config.public}/images/sprite.svg`, 'utf8');
       return `<div style="display:none;">\n${style}\n</div>`;
     }))
+    .pipe(greplace(/{version}/g, () => {
+      const pkg = getPackageJson();
+      return pkg.version;
+    }))
     .pipe(gulp.dest(config.public));
 });
 
-gulp.task('move', ['clean-html'], () => {
-  gulp.src([`${config.src}/*.html`])
+gulp.task('move', ['clean-static'], () => {
+  const staticFiles = [
+    `${config.srcBase}/*.html`,
+    `${config.srcBase}/manifest.json`,
+  ];
+
+  gulp.src(staticFiles)
     .pipe(gulp.dest(config.public));
 });
 
@@ -236,6 +256,13 @@ gulp.task('bump', () => {
   return gulp.src('./package.json')
     .pipe(bump({ type }))
     .pipe(gulp.dest('./'));
+});
+
+gulp.task('generate-service-worker', (callback) => {
+  swPrecache.write(join(config.public, 'sw.js'), {
+    staticFileGlobs: [config.public + '/**/*.{js,html,css,png,jpg,gif}'],
+    stripPrefix: config.public
+  }, callback);
 });
 
 gulp.task('watch', () => (

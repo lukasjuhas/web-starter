@@ -56,6 +56,7 @@
  */
 .visible-on-mobile {
   display: none !important;
+
   @include resp-max($breakpoint-sm) {
     display: block !important;
   }
@@ -63,6 +64,7 @@
 
 .visible-on-tablet {
   display: none !important;
+
   @include resp-max($breakpoint-md) {
     display: block !important;
   }

@@ -1,2 +1,2 @@
 gulpfile.babel.js
-public/*.js
+public/**/*.js

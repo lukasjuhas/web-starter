@@ -1,22 +1,22 @@
 /**
  * Colours
  */
-$col-brand             : #cccccc;
-$col-text              : #2c2c2c;
-$col-text-light        : #FFF;
-$col-background-light  : #FFF;
-$col-danger            : #D9534F;
-$col-notification      : #00C385;
+$col-brand: #ccc;
+$col-text: #2c2c2c;
+$col-text-light: #fff;
+$col-background-light: #fff;
+$col-danger: #d9534f;
+$col-notification: #00c385;
 
 /**
  * Typography
  */
-$sans-serif-font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif;
-$serif-font-family:       Georgia, "Times New Roman", Times, serif;
-$base-font-family:        $sans-serif-font-family;
-$base-font-size:          14;
-$base-line-height:        1.5;
-$base-spacing-unit:       ($base-font-size * $base-line-height) * 1px;
+$sans-serif-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$serif-font-family: Georgia, 'Times New Roman', Times, serif;
+$base-font-family: $sans-serif-font-family;
+$base-font-size: 14;
+$base-line-height: 1.5;
+$base-spacing-unit: ($base-font-size * $base-line-height) * 1px;
 
 
 /**
@@ -25,7 +25,6 @@ $base-spacing-unit:       ($base-font-size * $base-line-height) * 1px;
 $breakpoint-sm: 767px;
 $breakpoint-md: 992px;
 $breakpoint-lg: 1200px;
-
 $breakpoints: (
   'lg' '(min-width: ' + $breakpoint-lg + ')',
   'md' '(min-width: ' + $breakpoint-md + ') and (max-width: ' + ($breakpoint-lg - 1) + ')',
@@ -38,8 +37,8 @@ $breakpoints: (
  * Grid
  */
 $grid-max-width: 1200px;
-$grid-columns:   12;
-$grid-gutter:    $base-spacing-unit;
+$grid-columns: 12;
+$grid-gutter: $base-spacing-unit;
 
 /**
  * Adnimations

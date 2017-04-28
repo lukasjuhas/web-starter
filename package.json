@@ -60,9 +60,11 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-uglify": "^1.0.1",
-    "rollup-plugin-vue": "^2.2.20",
+    "rollup-plugin-vue": "2.2.21",
     "run-sequence": "^1.2.2",
+    "sw-precache": "^5.1.0",
     "uglify-js": "^2.7.5",
+    "vue-template-compiler": "^2.2.6",
     "yargs": "^6.6.0"
   },
   "license": "MIT"
