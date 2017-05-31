@@ -16,6 +16,7 @@ import inject from 'gulp-inject';
 import autoprefixer from 'gulp-autoprefixer';
 import svgSprite from 'gulp-svg-sprite';
 import imagemin from 'gulp-imagemin';
+import webp from 'gulp-webp';
 import rename from 'gulp-rename';
 import gulpif from 'gulp-if';
 import greplace from 'gulp-replace';
@@ -186,7 +187,13 @@ gulp.task('images', () => {
     .pipe(imagemin({
       progressive: true,
     }))
-    .pipe(gulp.dest(`${config.public}/images`));
+    .pipe(gulp.dest(`${config.public}/images`))
+    .on('end', () => {
+        // generate webp
+        return gulp.src(`${config.public}/images/*`)
+          .pipe(webp())
+          .pipe(gulp.dest(`${config.public}/images`));
+    });
 
   // handle svg
   gulp.src(`${config.src}/images/**/*.svg`)
