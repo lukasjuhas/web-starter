@@ -54,6 +54,11 @@
     "declaration-block-trailing-semicolon": "always",
     "declaration-block-no-duplicate-properties": true,
     "scss/selector-no-redundant-nesting-selector": true,
-    "plugin/no-unsupported-browser-features": false
+    "plugin/no-unsupported-browser-features": [true,
+      {
+        "severity": "warning",
+        "browsers": ['> 5%', 'Last 2 versions']
+      }
+    ]
   }
 }
