@@ -4,13 +4,16 @@ module.exports = {
   parserOptions: {
     sourceType: 'module'
   },
+  env: {
+    browser: true
+  },
   globals: {
     // 'window': true, e.g.
   },
   extends: 'airbnb-base',
   // required to lint *.vue files
   plugins: [
-    'html'
+    'vue'
   ],
   // custom rules here
   'rules': {

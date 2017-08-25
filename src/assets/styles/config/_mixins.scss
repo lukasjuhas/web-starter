@@ -1,34 +1,27 @@
 /*
- * Media query to respond to a minimum size (mobile first)
- */
+* Media query to respond to a minimum size (mobile first)
+*/
 @mixin resp-min($size) {
-   @media screen and (min-width: $size){
+  @media screen and (min-width: $size) {
     @content;
   }
 }
 
 /*
- * Media query to respond to a maximum size
- */
+* Media query to respond to a maximum size
+*/
 @mixin resp-max($size) {
-   @media screen and (max-width: $size){
+  @media screen and (max-width: $size) {
     @content;
   }
 }
 
 /*
- * Output font size in px/rem
- */
-@mixin font-size($px) {
-  font-size: $px + px;
-  font-size: #{$px / 16}rem;
-}
-
-/*
- * Placeholder mixin for <input>
- */
+* Placeholder mixin for <input>
+*/
 @mixin placeholder {
-  $placeholders: ":-webkit-input" ":-moz" "-moz" "-ms-input";
+  $placeholders: ':-webkit-input' ':-moz' '-moz' '-ms-input';
+
   @each $placeholder in $placeholders {
     &:#{$placeholder}-placeholder {
       @content;
@@ -37,16 +30,16 @@
 }
 
 /**
- * Clearfix
- */
+* Clearfix
+*/
 @mixin clearfix {
-  &:after,
-  &:before {
-    content: " ";
+  &::after,
+  &::before {
     display: table;
+    content: ' ';
   }
 
-  &:after {
+  &::after {
     clear: both;
   }
 }

@@ -1,38 +1,21 @@
 /**
  * Clearing and floating
  */
-.alignleft,
-.float-left {
+.alignleft {
   float: left;
-
-  img & {
-    margin-right: $base-spacing-unit;
-  }
 }
 
-.alignright,
-.float-right {
+.alignright {
   float: right;
-
-  img & {
-    margin-left: $base-spacing-unit;
-  }
 }
 
-.aligncenter,
-.float-center {
+.aligncenter {
   display: block;
-  margin: {
-    left: auto;
-    right: auto;
-  }
-
-  img & {
-    margin-bottom: $base-spacing-unit;
-  }
+  margin: 0 auto;
 }
 
 .clearfix {
+
   @include clearfix;
 }
 
@@ -55,23 +38,24 @@
  * Elements visibility
  */
 .visible-on-mobile {
-  display: none !important;
+  display: none;
 
   @include resp-max($breakpoint-sm) {
-    display: block !important;
+    display: block;
   }
 }
 
 .visible-on-tablet {
-  display: none !important;
+  display: none;
 
   @include resp-max($breakpoint-md) {
-    display: block !important;
+    display: block;
   }
 }
 
 .visible-on-desktop {
+
   @include resp-max($breakpoint-md) {
-    display: none !important;
+    display: none;
   }
 }

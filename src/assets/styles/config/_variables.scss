@@ -1,10 +1,10 @@
 /**
  * Colours
  */
-$col-brand: #ccc;
+$col-brand: #cccccc;
 $col-text: #2c2c2c;
-$col-text-light: #fff;
-$col-background-light: #fff;
+$col-text-light: #ffffff;
+$col-background-base: #ffffff;
 $col-danger: #d9534f;
 $col-notification: #00c385;
 
@@ -17,7 +17,6 @@ $base-font-family: $sans-serif-font-family;
 $base-font-size: 14;
 $base-line-height: 1.5;
 $base-spacing-unit: ($base-font-size * $base-line-height) * 1px;
-
 
 /**
  * Breakpoints
@@ -32,7 +31,6 @@ $breakpoints: (
   'xs' '(max-width: ' + $breakpoint-sm + ')'
 );
 
-
 /**
  * Grid
  */
@@ -44,7 +42,7 @@ $grid-gutter: $base-spacing-unit;
  * Adnimations
  *
  */
-$animate: .3s;
+$animate: 300ms;
 
 /**
  * Components
