@@ -1,7 +1,7 @@
 {
   "name": "web-starter",
   "description": "Starter kit for simple web sites",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "homepage": "http://itsluk.as",
   "author": "Lukas Juhas <lukas@itsluk.as>",
   "repository": {
